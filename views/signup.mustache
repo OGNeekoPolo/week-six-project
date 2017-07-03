@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Gabble</title>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Gabble</h1>
+    <h3>Where Ideas Connect</h3>
+  </header>
+  <h2>Join The Community</h2>
+  <form action="/signup" method="post">
+    <label for="email">Email:</label>
+    <input type="email" name="email">
+    <br>
+    <label for="username">Username:</label>
+    <input type="text" name="username">
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" name="password">
+    <br>
+    <label for="confirmation">Confirm Password:</label>
+    <input type="password" name="confirmation">
+    <br>
+    <button type="submit" name="submit">Submit</button>
+  </form>
+  <form action="/signin" method="get">
+    <button type="submit" name="signin">Already A Member?</button>
+  </form>
+</body>
+</html>
