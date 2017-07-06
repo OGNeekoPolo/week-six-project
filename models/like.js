@@ -4,11 +4,11 @@ module.exports = function(sequelize, DataTypes) {
     amount: DataTypes.INTEGER
   }, {});
 
-  Like.associate = function(models){
-    Like.belongsTo(models.Users, {as: 'user', foreignKey: 'userid'});
-  };
+
   Like.associate = function(models){
     Like.belongsTo(models.Post, {as: 'post', foreignKey: 'postid'});
+    Like.belongsTo(models.Users, {as: 'user', foreignKey: 'userid'});
+
   };
 
   return Like;

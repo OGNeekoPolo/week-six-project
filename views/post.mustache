@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<header>
+  <h1>Gabble</h1>
+  <nav>
+    <a href="/profile">{{username}}'s Profile</a>
+    <a href="/post">Create A Post</a>
+    <a href="/like">Daily Likes</a>
+  </nav>
+</header>
+<hr>
+<body>
+<h2>Create New Gab</h2>
+<form action="/posts" method="post">
+  <label for="title">Title:</label>
+  <input type="text" name="title" placeholder="Name Your Gab">
+  <br>
+  <label for="body">Body:</label>
+  <textarea name="body" rows="8" cols="80" placeholder="Gab Away..."></textarea>
+</form>
+</body>
+
+</html>

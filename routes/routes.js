@@ -6,10 +6,19 @@ const Router = express.Router();
 
 Router.use(bodyParser.urlencoded({extended: true}));
 
-// models.Post.findOne().then(function(users){
-//   console.log(users);
+// const users = models.Users.build({
+//   username: 'Mercenary7824',
+//   email: 'nikolas@theironyard.com',
+//   password: 'test',
+//   loggedin: false
 // });
-
+//
+// users.save().then(function(newUser){
+//   console.log(newUser);
+// }).catch(function(error){
+//   error.message = 'Your password is too short dummy!!';
+//   console.log(error.message);
+// });
 
 var sess;
 
@@ -40,8 +49,10 @@ Router.post('/signup', function(req, res){
     password: sess.password,
     email: req.body.email,
     loggedin: true
-  }).then(function(){
+  }).then(function(newUser){
     res.redirect('/profile');
+  }).catch(function(error){
+    res.send(error.message);
   });
 });
 
@@ -104,4 +115,11 @@ Router.get('/logout',function(req,res){
   });
 
 });
+
+
+Router.get('/post', function(req, res){
+  res.render('post');
+});
+
+
 module.exports = Router;
