@@ -12,19 +12,35 @@
   <nav>
     <a href="/profile">{{username}}'s Profile</a>
     <a href="/post">Create A Post</a>
-    <a href="/like">Daily Likes</a>
   </nav>
 </header>
 <hr>
 <body>
 <h2>Create New Gab</h2>
-<form action="/posts" method="post">
+<form action="/post" method="post">
   <label for="title">Title:</label>
   <input type="text" name="title" placeholder="Name Your Gab">
   <br>
   <label for="body">Body:</label>
   <textarea name="body" rows="8" cols="80" placeholder="Gab Away..."></textarea>
+  <button type="submit" name="gab_button">Post Gab</button>
 </form>
+<hr>
+<h2>Discover Gabble</h2>
+{{#allPosts}}
+<div>
+  <h4>{{title}}</h4>
+  <p>{{}}</p>
+  <p>Created On: {{createdAt}}</p>
+  <p>{{body}}</p>
+  <form action="/delete" method="post">
+    <button type="submit" name="delete" value="{{id}}">Delete</button>
+  </form>
+  <form action="/like" method="post">
+    <button type="submit" name="like" value="{{id}}">Like</button>
+  </form>
+</div>
+{{/allPosts}}
 </body>
 
 </html>

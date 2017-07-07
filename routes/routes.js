@@ -6,19 +6,6 @@ const Router = express.Router();
 
 Router.use(bodyParser.urlencoded({extended: true}));
 
-// const users = models.Users.build({
-//   username: 'Mercenary7824',
-//   email: 'nikolas@theironyard.com',
-//   password: 'test',
-//   loggedin: false
-// });
-//
-// users.save().then(function(newUser){
-//   console.log(newUser);
-// }).catch(function(error){
-//   error.message = 'Your password is too short dummy!!';
-//   console.log(error.message);
-// });
 
 var sess;
 
@@ -32,7 +19,7 @@ Router.get('/', function(req, res){
 });
 
 Router.get('/signup', function(req, res){
-  sess =req.session;
+  sess = req.session;
   if (sess.username) {
     res.redirect('/profile');
   } else {
@@ -41,15 +28,16 @@ Router.get('/signup', function(req, res){
 });
 
 Router.post('/signup', function(req, res){
-    sess = req.session;
-    sess.username = req.body.username;
-    sess.password = req.body.password;
     models.Users.create({
-    username: sess.username,
-    password: sess.password,
+    username: req.body.username,
+    password: req.body.password,
     email: req.body.email,
     loggedin: true
   }).then(function(newUser){
+    sess = req.session;
+    sess.username = newUser.username;
+    sess.password = newUser.password;
+    sess.number = newUser.id;
     res.redirect('/profile');
   }).catch(function(error){
     res.send(error.message);
@@ -67,18 +55,20 @@ Router.get('/signin', function(req, res){
 });
 
 Router.post('/signin', function(req, res){
-  sess = req.session;
-  sess.username = req.body.username;
-  sess.password = req.body.password;
-  models.Users.update({
-    loggedin: true,
-  }, {
+  models.Users.findOne({
     where: {
-      username: sess.username,
-      password: sess.password
+      username: req.body.username,
+      password: req.body.password
     }
-  }).then(function(){
+  }).then(function(user){
+    sess = req.session;
+    sess.username = user.username;
+    sess.number = user.id;
+    sess.password = user.password;
     res.redirect('/profile');
+  }).catch(function(error){
+    error.message = 'Invalid name or password';
+    res.send(error.message);
   });
 });
 
@@ -86,8 +76,15 @@ Router.post('/signin', function(req, res){
 Router.get('/profile', function(req, res){
   sess = req.session;
   if (sess.password) {
-    res.render('profile', {
-      username: sess.username,
+    models.Post.findAll({
+      where: {
+        userid: sess.number
+      }
+    }).then(function(posts){
+      res.render('profile', {
+        username: sess.username,
+        posts: posts
+      });
     });
   } else {
     res.redirect('/signup');
@@ -118,7 +115,66 @@ Router.get('/logout',function(req,res){
 
 
 Router.get('/post', function(req, res){
-  res.render('post');
+  sess = req.session;
+  models.Post.findAll().then(function(allPosts){
+    res.render('post', {
+      username: sess.username,
+      allPosts: allPosts
+    });
+  });
+});
+
+Router.post('/post', function(req, res){
+  sess = req.session;
+  models.Post.create({
+    title: req.body.title,
+    body: req.body.body,
+    userid: sess.number,
+  }).then(function(){
+    res.redirect('/post');
+  });
+});
+
+Router.post('/delete', function(req, res){
+  models.Like.destroy({
+    where: {
+      postid: req.body.delete
+    }
+  }).then(function(){
+    models.Post.destroy({
+      where: {
+        id: req.body.delete
+      }
+    });
+  }).then(function(){
+    res.redirect('/post');
+  });
+});
+
+Router.post('/profileDelete', function(req, res){
+  models.Like.destroy({
+    where: {
+      postid: req.body.delete
+    }
+  }).then(function(){
+    models.Post.destroy({
+      where: {
+        id: req.body.delete
+      }
+    });
+  }).then(function(){
+    res.redirect('/profile');
+  });
+});
+
+Router.post('/like', function(req, res){
+  models.Like.create({
+    userid: req.session.number,
+    postid: req.body.like
+  }).then(function(newLike){
+    console.log(newLike);
+    res.redirect('/post');
+  });
 });
 
 

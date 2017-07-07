@@ -11,7 +11,6 @@
   <nav>
     <a href="./profile">{{username}}'s Profile</a>
     <a href="./post">Create A Post</a>
-    <a href="./likes">Daily Likes</a>
   </nav>
 </header>
 <hr>
@@ -20,6 +19,18 @@
     <h1>Hello, {{username}}</h1>
     <button type="submit" name="logout">Log Out</button>
     <h2>Welcome Home</h2>
+    <hr>
+    <h2>{{username}}'s Gabs</h2>
+    {{#posts}}
+    <div>
+      <h4>{{title}}</h4>
+      <p>Created On: {{createdAt}}</p>
+      <p>{{body}}</p>
+      <form action="/profileDelete" method="post">
+        <button type="submit" name="delete" value="{{id}}">Delete</button>
+      </form>
+    </div>
+    {{/posts}}
   </form>
 </body>
 </html>
